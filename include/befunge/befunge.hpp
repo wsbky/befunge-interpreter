@@ -129,7 +129,7 @@ struct Befunge {
           sz(std::make_pair(0, 0)),
           astack_mode(false),
           direction(std::make_pair(1, 0)) {}
-    void set(std::istream &s = std::cin) {
+    void set(std::istream &s) {
       std::vector<std::string> lines;
       std::vector<int> line_sizes;
       std::string line;
@@ -179,22 +179,25 @@ struct Befunge {
     void set_direction(int dx, int dy) { direction = std::make_pair(dx, dy); }
   };
   BefungeTable t;
+  std::istream &is;
+  std::ostream &os;
+  std::ostream &ds;
   void get_dgt() {
     std::string s;
-    std::cin >> s;
+    is >> s;
     num_type n = stoi(s);
     t.s.push(n);
   }
   void get_chr() {
-    num_type n = std::cin.get();
+    num_type n = is.get();
     t.s.push(n);
   }
   void put_dgt() {
-    std::cout << t.s.top();
+    os << t.s.top();
     t.s.pop();
   }
   void put_chr() {
-    std::cout.put(t.s.top());
+    os.put(t.s.top());
     t.s.pop();
   }
 
@@ -216,8 +219,10 @@ struct Befunge {
   constexpr static char s_dup = ':', s_rev = '\\', s_dmp = '$';
   // memory control
   constexpr static char m_fnd = 'g', m_rpl = 'p';
-  Befunge(std::istream &is = std::cin) {
-    t.set(is);
+  Befunge(std::istream &ism = std::cin, std::istream &i = std::cin,
+          std::ostream &o = std::cout, std::ostream &d = std::cerr)
+      : is(i), os(o), ds(d) {
+    t.set(ism);
     std::srand(time(NULL));
   }
   bool step() {
