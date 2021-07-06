@@ -29,7 +29,6 @@ namespace BefungeInterpreter {
 struct out_of_range : public std::out_of_range {
   using std::out_of_range::out_of_range;
 };
-template <bool opt = true>
 struct Befunge {
  private:
   using befungeNumber = int;

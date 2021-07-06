@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
     for (int i = 1; i < argc; ++i) {
       ifstream ifs(argv[i]);
       if (ifs) {
-        BefungeInterpreter::Befunge<> b(ifs);
+        BefungeInterpreter::Befunge b(ifs);
         b.run();
       } else
         std::cerr << "An error occurred whlie reading file " << argv[i]
@@ -33,6 +33,6 @@ int main(int argc, char *argv[]) {
       ifs.close();
     }
   else
-    BefungeInterpreter::Befunge<>().run();
+    BefungeInterpreter::Befunge().run();
   return 0;
 }
