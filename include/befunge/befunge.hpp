@@ -86,15 +86,15 @@ struct Befunge {
       s.push((x > y) ? 1 : 0);
     }
     void not_() {
-      befungeNumber t = (s.top() == 0) ? 1 : 0;
+      befungeNumber tmp = (s.top() == 0) ? 1 : 0;
       s.pop();
-      s.push(t);
+      s.push(tmp);
     }
     void dup() {
-      befungeNumber t = s.top();
+      befungeNumber tmp = s.top();
       s.pop();
-      s.push(t);
-      s.push(t);
+      s.push(tmp);
+      s.push(tmp);
     }
     void rev() {
       befungeNumber y = s.top();
@@ -128,20 +128,20 @@ struct Befunge {
           sz(std::make_pair(0, 0)),
           astack_mode(false),
           direction(std::make_pair(1, 0)) {}
-    void set(std::istream &s) {
+    void set(std::istream &ss) {
       std::vector<std::string> lines;
       std::vector<int> line_sizes;
       std::string line;
-      while (std::getline(s, line)) lines.push_back(line);
-      int tab_height = lines.size();
+      while (std::getline(ss, line)) lines.push_back(line);
+      int tab_height = (int)lines.size();
       t.reserve(tab_height);
       line_sizes.reserve(tab_height);
-      for (const auto &s : lines) line_sizes.push_back(s.size());
+      for (const auto &l : lines) line_sizes.push_back((int)l.size());
       int tab_width = *std::max_element(line_sizes.begin(), line_sizes.end());
-      for (const auto &s : lines) {
+      for (const auto &l : lines) {
         num_type i = 0;
         std::vector<befungeNumber> tmp(tab_width, -1);
-        for (const auto &c : s) tmp[i++] = befungeNumber(c);
+        for (const auto &c : l) tmp[i++] = befungeNumber(c);
         t.push_back(tmp);
       }
       sz = std::make_pair(tab_width, tab_height);
@@ -155,6 +155,12 @@ struct Befunge {
       pt.second += direction.second * a;
       if (pt.first >= sz.first || pt.first < 0 || pt.second >= sz.second ||
           pt.second < 0)
+        // std::stringstream err;
+        // err << "Pointer exceeded the boundary of the memory at ("
+        // << pt.first
+        // << ", "
+        // << pt.second
+        // << std::endl;
         throw out_of_range("Pointer exceeded the boundary of the memory.");
     }
     void fnd() {
@@ -180,7 +186,6 @@ struct Befunge {
   BefungeTable t;
   std::istream &is;
   std::ostream &os;
-  std::ostream &ds;
   void get_dgt() {
     std::string s;
     is >> s;
@@ -196,7 +201,7 @@ struct Befunge {
     t.s.pop();
   }
   void put_chr() {
-    os.put(t.s.top());
+    os.put((char)t.s.top());
     t.s.pop();
   }
 
@@ -219,10 +224,10 @@ struct Befunge {
   // memory control
   constexpr static char m_fnd = 'g', m_rpl = 'p';
   Befunge(std::istream &ism = std::cin, std::istream &i = std::cin,
-          std::ostream &o = std::cout, std::ostream &d = std::cerr)
-      : is(i), os(o), ds(d) {
+          std::ostream &o = std::cout)
+      : is(i), os(o) {
     t.set(ism);
-    std::srand(time(NULL));
+    std::srand((unsigned int)time(NULL));
   }
   bool step() {
     num_type a = 1;
