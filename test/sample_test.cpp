@@ -13,3 +13,44 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+#include <gtest/gtest.h>
+
+#include "befunge/befunge.hpp"
+
+// TEST(SampleTest, 1) {
+//   using namespace std;
+
+//   stringstream ss;
+//   istringstream is;
+//   ostringstream os, ops;
+
+//   ss << "v @_       v\n"
+//      << ">0\"!dlroW\"v \n"
+//      << "v  :#     < \n"
+//      << ">\" ,olleH\" v\n"
+//      << " ^       <  ";
+
+//   BefungeInterpreter::Befunge b(ss, is, os);
+//   b.run();
+//   EXPECT_EQ("Hello, World!", os.str());
+// }
+
+TEST(SampleTest, 1) {
+  using namespace std;
+
+  ifstream ifp("sample/01.befunge"), otp("sample/01.txt");
+  istringstream is;
+  ostringstream os, ots;
+  if (ifp && otp) {
+    BefungeInterpreter::Befunge b(ifp, is, os);
+    b.run();
+    char tmp;
+    while (otp.get(tmp)) ots << tmp;
+    EXPECT_EQ(ots.str(), os.str());
+  } else {
+    cerr << "Failed to open files." << endl;
+  }
+  ifp.close();
+  otp.close();
+}

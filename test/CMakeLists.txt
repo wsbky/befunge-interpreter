@@ -22,7 +22,7 @@ enable_testing()
 add_subdirectory(${PROJECT_SOURCE_DIR}/googletest)
 include(GoogleTest)
 
-list(APPEND Tests InstructionsTest SampleTest)
+list(APPEND Tests SampleTest)
 list(APPEND Files sample_test.cpp)
 
 foreach(Test File IN ZIP_LISTS Tests Files)

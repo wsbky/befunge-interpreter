@@ -154,14 +154,12 @@ struct Befunge {
       pt.first += direction.first * a;
       pt.second += direction.second * a;
       if (pt.first >= sz.first || pt.first < 0 || pt.second >= sz.second ||
-          pt.second < 0)
-        // std::stringstream err;
-        // err << "Pointer exceeded the boundary of the memory at ("
-        // << pt.first
-        // << ", "
-        // << pt.second
-        // << std::endl;
-        throw out_of_range("Pointer exceeded the boundary of the memory.");
+          pt.second < 0) {
+        std::stringstream err;
+        err << "Pointer exceeded the boundary of the memory at (" << pt.first
+            << ", " << pt.second << std::endl;
+        throw out_of_range(err.str());
+      }
     }
     void fnd() {
       befungeNumber y = s.top();
