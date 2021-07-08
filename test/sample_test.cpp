@@ -73,3 +73,21 @@ TEST(SampleTest, 2) {
   ifp.close();
   otp.close();
 }
+
+TEST(SampleTest, 3) {
+  using namespace std;
+
+  ifstream ifp("../sample/03.befunge"), otp("../sample/03_o.txt");
+  istringstream is;
+  ostringstream os, ots;
+  if (ifp && otp) {
+    BefungeInterpreter::Befunge b(ifp, is, os);
+    b.run();
+    char tmp;
+    while (otp.get(tmp)) ots << tmp;
+    EXPECT_EQ(ots.str(), os.str());
+  } else
+    cerr << "Failed to open file." << endl;
+  ifp.close();
+  otp.close();
+}
