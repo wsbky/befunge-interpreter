@@ -158,7 +158,7 @@ struct Befunge {
           pt.second < 0) {
         std::ostringstream err_msg;
         err_msg << "Pointer exceeded the boundary of the memory at ("
-                << pt.first << ", " << pt.second << std::endl;
+                << pt.first << ", " << pt.second << ")." << std::endl;
         throw out_of_range(err_msg.str());
       }
     }
