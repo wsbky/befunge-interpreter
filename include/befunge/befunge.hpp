@@ -42,70 +42,80 @@ struct Befunge {
       s.push(a);
       if (s.size() >= stack_lim) throw out_of_range("Stack overflow.");
     }
-    befungeNumber top() { return s.top(); }
-    void pop() { s.pop(); }
+    befungeNumber top() {
+      if (!s.empty())
+        return s.top();
+      else
+        throw out_of_range("Access to the top of an empty stack.");
+    }
+    void pop() {
+      if (!s.empty())
+        return s.pop();
+      else
+        throw out_of_range("pop from an empty stack.");
+    }
     void add() {
-      befungeNumber y = s.top();
-      s.pop();
-      befungeNumber x = s.top();
-      s.pop();
+      befungeNumber y = top();
+      pop();
+      befungeNumber x = top();
+      pop();
       s.push(x + y);
     }
     void sub() {
-      befungeNumber y = s.top();
-      s.pop();
-      befungeNumber x = s.top();
-      s.pop();
+      befungeNumber y = top();
+      pop();
+      befungeNumber x = top();
+      pop();
       s.push(x - y);
     }
     void mul() {
-      befungeNumber y = s.top();
-      s.pop();
-      befungeNumber x = s.top();
-      s.pop();
+      befungeNumber y = top();
+      pop();
+      befungeNumber x = top();
+      pop();
       s.push(x * y);
     }
     void div() {
-      befungeNumber y = s.top();
-      s.pop();
-      befungeNumber x = s.top();
-      s.pop();
+      befungeNumber y = top();
+      pop();
+      befungeNumber x = top();
+      pop();
       s.push(x / y);
     }
     void mod() {
-      befungeNumber y = s.top();
-      s.pop();
-      befungeNumber x = s.top();
-      s.pop();
+      befungeNumber y = top();
+      pop();
+      befungeNumber x = top();
+      pop();
       s.push(x % y);
     }
     void pos() {
-      befungeNumber y = s.top();
-      s.pop();
-      befungeNumber x = s.top();
-      s.pop();
+      befungeNumber y = top();
+      pop();
+      befungeNumber x = top();
+      pop();
       s.push((x > y) ? 1 : 0);
     }
     void not_() {
-      befungeNumber tmp = (s.top() == 0) ? 1 : 0;
-      s.pop();
+      befungeNumber tmp = (top() == 0) ? 1 : 0;
+      pop();
       s.push(tmp);
     }
     void dup() {
-      befungeNumber tmp = s.top();
-      s.pop();
+      befungeNumber tmp = top();
+      pop();
       s.push(tmp);
       s.push(tmp);
     }
     void rev() {
       befungeNumber y = s.top();
-      s.pop();
+      pop();
       befungeNumber x = s.top();
-      s.pop();
+      pop();
       s.push(y);
       s.push(x);
     }
-    void dmp() { s.pop(); }
+    void dmp() { pop(); }
   };
   struct BefungeTable {
     using befungeNumber = int;
@@ -124,7 +134,6 @@ struct Befunge {
     bool astack_mode;
     std::pair<int, int> direction;
     BefungeTable()
-        // : t(tblen_lim, std::vector<befungeNumber>(tblen_lim)),
         : pt(std::make_pair(0, 0)),
           sz(std::make_pair(0, 0)),
           astack_mode(false),
@@ -149,18 +158,19 @@ struct Befunge {
       direction = std::make_pair(1, 0);
     }
     const auto &cur() { return t[pt.second][pt.first]; }
-    const auto &get(int x, int y) { return t[x][y]; }
+    const auto &get(int x, int y) { return t[y][x]; }
     void nxt() { nxt(1); }
     void nxt(num_type a) {
       pt.first += direction.first * a;
       pt.second += direction.second * a;
-      if (pt.first >= sz.first || pt.first < 0 || pt.second >= sz.second ||
-          pt.second < 0) {
-        std::ostringstream err_msg;
-        err_msg << "Pointer exceeded the boundary of the memory at ("
-                << pt.first << ", " << pt.second << ")." << std::endl;
-        throw out_of_range(err_msg.str());
-      }
+      if (pt.first >= sz.first)
+        pt.first -= sz.first;
+      else if (pt.first < 0)
+        pt.first += sz.first;
+      else if (pt.second >= sz.second)
+        pt.second -= sz.second;
+      else if (pt.second < 0)
+        pt.second += sz.second;
     }
     void fnd() {
       befungeNumber y = s.top();
@@ -176,7 +186,7 @@ struct Befunge {
       s.pop();
       num_type v = s.top();
       s.pop();
-      t[x][y] = v;
+      t[y][x] = v;
     }
     void dqt() { astack_mode = !astack_mode; }
     void stk() { s.push(cur()); }
