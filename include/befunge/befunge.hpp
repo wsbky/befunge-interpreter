@@ -21,6 +21,7 @@
 #include <ctime>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <stack>
 #include <string>
 #include <vector>
@@ -155,10 +156,10 @@ struct Befunge {
       pt.second += direction.second * a;
       if (pt.first >= sz.first || pt.first < 0 || pt.second >= sz.second ||
           pt.second < 0) {
-        std::stringstream err;
-        err << "Pointer exceeded the boundary of the memory at (" << pt.first
-            << ", " << pt.second << std::endl;
-        throw out_of_range(err.str());
+        std::ostringstream err_msg;
+        err_msg << "Pointer exceeded the boundary of the memory at ("
+                << pt.first << ", " << pt.second << std::endl;
+        throw out_of_range(err_msg.str());
       }
     }
     void fnd() {
