@@ -16,27 +16,7 @@
 
 #include <gtest/gtest.h>
 
-#include <filesystem>
-
 #include "befunge/befunge.hpp"
-
-// TEST(SampleTest, 1) {
-//   using namespace std;
-
-//   stringstream ss;
-//   istringstream is;
-//   ostringstream os, ops;
-
-//   ss << "v @_       v\n"
-//      << ">0\"!dlroW\"v \n"
-//      << "v  :#     < \n"
-//      << ">\" ,olleH\" v\n"
-//      << " ^       <  ";
-
-//   BefungeInterpreter::Befunge b(ss, is, os);
-//   b.run();
-//   EXPECT_EQ("Hello, World!", os.str());
-// }
 
 TEST(SampleTest, 1) {
   using namespace std;
@@ -78,6 +58,24 @@ TEST(SampleTest, 3) {
   using namespace std;
 
   ifstream ifp("../sample/03.befunge"), otp("../sample/03_o.txt");
+  istringstream is;
+  ostringstream os, ots;
+  if (ifp && otp) {
+    BefungeInterpreter::Befunge b(ifp, is, os);
+    b.run();
+    char tmp;
+    while (otp.get(tmp)) ots << tmp;
+    EXPECT_EQ(ots.str(), os.str());
+  } else
+    cerr << "Failed to open file." << endl;
+  ifp.close();
+  otp.close();
+}
+
+TEST(SampleTest, 4) {
+  using namespace std;
+
+  ifstream ifp("../sample/04.befunge"), otp("../sample/04_o.txt");
   istringstream is;
   ostringstream os, ots;
   if (ifp && otp) {
