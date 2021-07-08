@@ -42,17 +42,9 @@ struct Befunge {
       s.push(a);
       if (s.size() >= stack_lim) throw out_of_range("Stack overflow.");
     }
-    befungeNumber top() {
-      if (!s.empty())
-        return s.top();
-      else
-        throw out_of_range("Access to the top of an empty stack.");
-    }
+    befungeNumber top() { return (s.empty() ? 0 : s.top()); }
     void pop() {
-      if (!s.empty())
-        return s.pop();
-      else
-        throw out_of_range("pop from an empty stack.");
+      if (!s.empty()) return s.pop();
     }
     void add() {
       befungeNumber y = top();
