@@ -37,9 +37,9 @@ jobs:
 
       - name: Configure
         run: cmake ${{env.workflow_src_dir}}
-      
+
       - name: Build
         run: cmake --build .
-      
+
       - name: Test
-        run: cmake --extra-verbose
+        run: ctest --extra-verbose
