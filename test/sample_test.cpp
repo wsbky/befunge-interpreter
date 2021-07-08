@@ -16,6 +16,8 @@
 
 #include <gtest/gtest.h>
 
+#include <filesystem>
+
 #include "befunge/befunge.hpp"
 
 // TEST(SampleTest, 1) {
@@ -39,7 +41,7 @@
 TEST(SampleTest, 1) {
   using namespace std;
 
-  ifstream ifp("sample/01.befunge"), otp("sample/01.txt");
+  ifstream ifp("../sample/01.befunge"), otp("../sample/01_o.txt");
   istringstream is;
   ostringstream os, ots;
   if (ifp && otp) {
@@ -48,9 +50,26 @@ TEST(SampleTest, 1) {
     char tmp;
     while (otp.get(tmp)) ots << tmp;
     EXPECT_EQ(ots.str(), os.str());
-  } else {
-    cerr << "Failed to open files." << endl;
-  }
+  } else
+    cerr << "Failed to open file." << endl;
+  ifp.close();
+  otp.close();
+}
+
+TEST(SampleTest, 2) {
+  using namespace std;
+
+  ifstream ifp("../sample/02.befunge"), otp("../sample/02_o.txt");
+  istringstream is;
+  ostringstream os, ots;
+  if (ifp && otp) {
+    BefungeInterpreter::Befunge b(ifp, is, os);
+    b.run();
+    char tmp;
+    while (otp.get(tmp)) ots << tmp;
+    EXPECT_EQ(ots.str(), os.str());
+  } else
+    cerr << "Failed to open file." << endl;
   ifp.close();
   otp.close();
 }
