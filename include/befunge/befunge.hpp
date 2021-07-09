@@ -44,7 +44,7 @@ struct Befunge {
     }
     befungeNumber top() { return (s.empty() ? 0 : s.top()); }
     void pop() {
-      if (!s.empty()) return s.pop();
+      if (!s.empty()) s.pop();
     }
     void add() {
       befungeNumber y = top();
