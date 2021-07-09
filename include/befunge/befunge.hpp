@@ -21,6 +21,7 @@
 #include <ctime>
 #include <fstream>
 #include <iostream>
+#include <random>
 #include <sstream>
 #include <stack>
 #include <string>
@@ -187,6 +188,7 @@ struct Befunge {
   BefungeTable t;
   std::istream &is;
   std::ostream &os;
+  std::mt19937 mt{std::random_device{}()};
   void get_dgt() {
     std::string s;
     is >> s;
@@ -250,7 +252,7 @@ struct Befunge {
           t.s.pop();
           break;
         case c_rnd:
-          switch (rand() % 4) {
+          switch (std::uniform_int_distribution<int>(0, 3)(mt) % 4) {
             case 0: t.set_direction(1, 0); break;
             case 1: t.set_direction(-1, 0); break;
             case 2: t.set_direction(0, -1); break;
